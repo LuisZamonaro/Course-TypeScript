@@ -1,0 +1,35 @@
+// ENV variables
+require("dotenv").config()
+
+import express from 'express'
+import config from 'config'
+
+const app = express()
+
+//JSON middleware
+app.use(express.json())
+
+// DB
+import db from '../config/db'
+
+// Routes
+import router from './router'
+
+// Logger
+// import Logger from '../config/logger'
+
+// Middlewares
+// import morganMiddleware from './middleware/morganMiddleware'
+import morgan from 'morgan'
+
+// app.use(morganMiddleware)
+
+app.use("/api/", router)
+
+//app port
+const port = config.get<number>("port")
+
+app.listen(port, async () => {
+    await db() // só inicia a aplicação se conectar
+    console.log(`Aplicação está funcionando na porta: ${port}`)
+})
